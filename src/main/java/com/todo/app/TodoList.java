@@ -1,3 +1,5 @@
+package com.todo.app;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.io.*;
@@ -8,18 +10,23 @@ import java.lang.reflect.Type;
 public class TodoList {
     private List<Todo> todos;
     private int nextId;
-    private static final String SAVE_FILE = "todos.json";
+    private final String saveFile;
     private final Gson gson;
 
     public TodoList() {
+        this("todos.json");
+    }
+
+    public TodoList(String saveFile) {
         this.gson = new Gson();
         this.todos = new ArrayList<>();
         this.nextId = 1;
+        this.saveFile = saveFile;
         loadTodos();
     }
 
     private void loadTodos() {
-        File file = new File(SAVE_FILE);
+        File file = new File(saveFile);
         if (file.exists()) {
             try (Reader reader = new FileReader(file)) {
                 Type todoListType = new TypeToken<ArrayList<Todo>>(){}.getType();
@@ -39,7 +46,7 @@ public class TodoList {
     }
 
     private void saveTodos() {
-        try (Writer writer = new FileWriter(SAVE_FILE)) {
+        try (Writer writer = new FileWriter(saveFile)) {
             gson.toJson(todos, writer);
         } catch (IOException e) {
             System.err.println("Görevler kaydedilirken hata oluştu: " + e.getMessage());

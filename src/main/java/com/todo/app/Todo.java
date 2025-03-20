@@ -1,3 +1,5 @@
+package com.todo.app;
+
 public class Todo {
     private int id;
     private String title;
